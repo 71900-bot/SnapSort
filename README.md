@@ -6,17 +6,38 @@ For example, a folder containing `Screenshot_1.png`, `Screenshot_2.png`, and `Sc
 
 ## What the App Offers
 
-- Select a folder containing images.
-- Scan supported image files automatically.
-- Preview old and new filenames before making changes.
-- Configure a filename prefix, starting number, and number width.
-- Sort the preview alphabetically or by file date.
-- Rename files directly in the selected folder in desktop mode.
-- Detect duplicate names and existing destination files before renaming.
-- Use temporary filenames during the operation to support safe batch renaming.
-- Attempt to restore original filenames if a rename operation fails.
-- Use browser preview mode to generate a renamed ZIP file when direct filesystem access is unavailable.
-- Keep files local to the device; the app does not upload images.
+SnapSort solves one specific problem: renaming many image files with a consistent numbering pattern.
+
+### Browser version
+
+The browser version is useful for demonstrations, quick previews, and users who do not want to install an application. It lets you:
+
+1. Select multiple local image files with the browser file picker.
+2. Enter a filename prefix, such as `Project`.
+3. Choose the starting number, such as `1`.
+4. Choose the number width, such as `2 digits`.
+5. Preview results such as `Project_01.png`, `Project_02.png`, and `Project_03.png`.
+6. Sort the selected files by name or date added.
+7. Remove individual files from the preview.
+8. Download the renamed images as a ZIP file.
+
+Browsers cannot directly modify arbitrary files in a local folder, so browser mode creates a renamed ZIP instead of changing the original files.
+
+### Windows desktop version
+
+The Windows desktop version provides the complete local workflow. It lets you:
+
+1. Choose an image folder from the Windows folder picker.
+2. Scan the folder for supported image files.
+3. Preview every original filename and its proposed new filename.
+4. Configure the prefix, starting number, and number width.
+5. Sort the rename order by filename or modification date.
+6. Rename the files directly inside the selected folder.
+7. Prevent overwriting unrelated existing files.
+8. Handle filename swaps safely through temporary staging names.
+9. Attempt a rollback if the rename operation fails.
+
+Files remain on the local device. SnapSort does not upload or send pictures to a server.
 - Use a colorful 2D cartoon-style interface with a custom SnapSort app icon.
 
 Supported image formats:
@@ -30,16 +51,30 @@ Supported image formats:
 
 ## Technical Skills and Stack Used
 
-- **TypeScript** for the renderer application.
-- **Electron** for the desktop window and local filesystem access.
-- **Vite** for development and production bundling.
-- **Node.js filesystem APIs** for scanning folders and renaming files.
-- **Electron IPC and `contextBridge`** for a secure renderer-to-main-process API.
-- **HTML and CSS** for the responsive user interface.
-- **JSZip** for the browser fallback ZIP export.
-- **Electron Builder** for Windows packaging.
-- **Concurrently** and **wait-on** for the development workflow.
-- **Vite relative asset configuration** so packaged Electron builds load their JavaScript and CSS correctly from `file://` URLs.
+### Frontend and user interface
+
+- **HTML** creates the application structure and controls.
+- **CSS** provides the responsive layout, colorful 2D cartoon visual style, file preview rows, forms, buttons, and mobile layout.
+- **TypeScript** implements the renderer logic, form handling, sorting, preview generation, validation, and user interactions.
+- **Vite** serves the frontend during development and bundles the production browser assets.
+- **Vite `base: './'` configuration** makes JavaScript and CSS load correctly when Electron opens the built app through local `file://` URLs.
+
+### Desktop and filesystem functionality
+
+- **Electron** wraps the frontend in a Windows desktop application.
+- **Node.js `fs/promises`** scans image folders, reads file metadata, and renames files.
+- **Electron IPC** connects the renderer to the main process for folder selection, folder scanning, and renaming.
+- **Electron `contextBridge`** exposes only the required native operations while keeping Node.js APIs unavailable to the renderer.
+- **Temporary staging filenames** prevent collisions when filenames overlap or are being exchanged.
+
+### File export and packaging
+
+- **JSZip** creates renamed ZIP downloads in browser mode.
+- **Electron Builder** creates the Windows NSIS installer and unpacked desktop build.
+- **NSIS configuration** provides a visible setup wizard, installation-folder selection, desktop shortcuts, and Start Menu shortcuts.
+- **SVG** is used for the custom SnapSort cartoon icon and browser favicon.
+- **Concurrently** starts Vite and Electron together during development.
+- **wait-on** ensures Electron starts after the Vite development server is available.
 
 ## Requirements
 
