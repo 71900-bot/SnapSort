@@ -12,6 +12,7 @@ function createWindow() {
     minHeight: 650,
     backgroundColor: '#f5f1e8',
     title: 'SnapSort',
+    icon: path.join(__dirname, '..', isDevelopment ? 'public' : 'dist', 'snap-sort-icon.svg'),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,

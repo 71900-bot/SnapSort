@@ -17,6 +17,7 @@ For example, a folder containing `Screenshot_1.png`, `Screenshot_2.png`, and `Sc
 - Attempt to restore original filenames if a rename operation fails.
 - Use browser preview mode to generate a renamed ZIP file when direct filesystem access is unavailable.
 - Keep files local to the device; the app does not upload images.
+- Use a colorful 2D cartoon-style interface with a custom SnapSort app icon.
 
 Supported image formats:
 
@@ -38,6 +39,7 @@ Supported image formats:
 - **JSZip** for the browser fallback ZIP export.
 - **Electron Builder** for Windows packaging.
 - **Concurrently** and **wait-on** for the development workflow.
+- **Vite relative asset configuration** so packaged Electron builds load their JavaScript and CSS correctly from `file://` URLs.
 
 ## Requirements
 
@@ -105,6 +107,10 @@ Create a Windows installer/build output:
 ```powershell
 npm run desktop
 ```
+
+The generated installer is a standard setup wizard. It shows installation progress, allows the installation directory to be changed, creates Start Menu and desktop shortcuts, and displays a completion screen. The installer is generated under `release`, for example `release/SnapSort Setup 1.0.0.exe`. Keeping installers in `release` prevents a later Vite build from deleting them when it cleans `dist`.
+
+After installation, launch SnapSort from the Windows Start Menu or desktop shortcut. You do not need VS Code, Node.js, or `npm run dev` to use the installed application.
 
 Create an unpacked desktop build for testing:
 
